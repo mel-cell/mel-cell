@@ -1,7 +1,7 @@
 # Welcome to mel-cell's GitHub 👋
 
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Mountain Landscape Banner" width="100%"/>
+  <img src="https://i.pinimg.com/736x/66/5d/53/665d530753fd00e1dd3830f5a463d640.jpg" alt="Mountain Landscape Banner" width="100%"/>
 </div>
 
 <div align="center">
