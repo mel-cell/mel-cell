@@ -22,7 +22,6 @@
   <br/><br/>
   <strong>Skills:</strong> Team Lead, Working Under Pressure  
   <br/><br/>
-  <img src="https://media.giphy.com/media/iY8CRBdqlODJzxEJnn/giphy.gif" width="180px"/>
 </div>
 
 ## Technologies
