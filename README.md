@@ -52,12 +52,8 @@
 ## Stats
 <div align="center">
   <div style="display: flex; justify-content: space-around; gap: 0; margin-bottom: 20px;">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=dark" alt="Top Languages" style="width: 400px; height: 200px; object-fit: cover;">
     <img src="https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=dark&count_private=true" alt="GitHub Stats" style="width: 400px; height: 200px; object-fit: cover;">
-  </div>
-  <div style="display: flex; justify-content: space-around; gap: 0;">
     <img src="https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=dark" alt="GitHub Streak" style="width: 400px; height: 200px; object-fit: cover;">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=mel-cell&repo=[your-repo-name]&theme=dark" alt="Top Pins" style="width: 400px; height: 200px; object-fit: cover;"> <!-- Replace [your-repo-name] with an actual repo if desired -->
   </div>
 </div>
 
