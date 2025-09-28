@@ -1,9 +1,9 @@
-# Welcome to mel-cell's GitHub   <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="60px"/>
+# Welcome to mel-cell's GitHub   <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="30px"/>
 
 
 <div align="center">
   <img src="https://i.pinimg.com/736x/66/5d/53/665d530753fd00e1dd3830f5a463d640.jpg" alt="Mountain Landscape Banner" width="100%"/>
-
+  <br/>
 <div align="center">
   <a href="#technologies">Technologies</a> •
   <a href="#stats">Stats</a>
@@ -11,6 +11,7 @@
 
 
 <div align="center">  
+<br/>
   <strong>Hello! I'm mel-cell</strong> – a Web Developer, DevOps, and Machine Learning Engineer passionate about building innovative solutions.  
   <br/>
   <em>I thrive in dynamic environments, leading teams and delivering under pressure.</em>
@@ -48,6 +49,7 @@
   <img src="https://img.shields.io/badge/TensorFlow-000000?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow" />
   <img src="https://img.shields.io/badge/Git-000000?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
 </div>
+<br/>
 
 ## Stats
 <div align="center">
