@@ -1,4 +1,5 @@
-# Welcome to mel-cell's GitHub 👋
+# Welcome to mel-cell's GitHub   <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="60px"/>
+
 
 <div align="center">
   <img src="https://i.pinimg.com/736x/66/5d/53/665d530753fd00e1dd3830f5a463d640.jpg" alt="Mountain Landscape Banner" width="100%"/>
@@ -8,7 +9,6 @@
   <a href="#stats">Stats</a>
 </div>
 
-  <!-- <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="60px"/> -->
 
 <div align="center">
   <strong>Hello! I'm mel-cell</strong> – a Web Developer, DevOps, and Machine Learning Engineer passionate about building innovative solutions.  
