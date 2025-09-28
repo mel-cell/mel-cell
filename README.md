@@ -16,60 +16,51 @@
 </div>
 
 <div align="center">
-  <strong>Hello! I'm mel-cell</strong> – a [your role, e.g., software engineer] passionate about [your interests, e.g., web development and open-source].  
+  <strong>Hello! I'm mel-cell</strong> – a Web Developer, DevOps, and Machine Learning Engineer passionate about building innovative solutions.  
   <br/>
-  <em>[Your bio details, e.g., Learning systems and contributing to projects at University of Example.]</em>
+  <em>I thrive in dynamic environments, leading teams and delivering under pressure.</em>
   <br/><br/>
-  <strong>Education:</strong> [e.g., B.S. in Computer Science, University of Example, 2020-2024]  
-  <br/>
-  <strong>Skills:</strong> [e.g., Problem-solving, Team collaboration, Continuous learning]  
+  <strong>Skills:</strong> Team Lead, Working Under Pressure  
   <br/><br/>
   <img src="https://media.giphy.com/media/iY8CRBdqlODJzxEJnn/giphy.gif" width="180px"/>
 </div>
 
 ## Technologies
 <div align="center">
-  <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/js-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/html-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/css-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/python-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/nodejs-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/firebase-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/mysql-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/mongodb-icon.svg" alt="icon" width="60" height="60" />
-  <img src="https://techstack-generator.vercel.app/git-icon.svg" alt="icon" width="60" height="60" />
-</div>
-
-<br/>
-
-<div align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Firebase-FFCB2B?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Python-000000?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/XML-000000?style=for-the-badge&logo=xml&logoColor=white" alt="XML" />
+  <img src="https://img.shields.io/badge/PostgreSQL-000000?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/MariaDB-000000?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB" />
+  <img src="https://img.shields.io/badge/MySQL-000000?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-000000?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Bootstrap-000000?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
+  <img src="https://img.shields.io/badge/Linux-000000?style=for-the-badge&logo=linux&logoColor=white" alt="Linux" />
+  <img src="https://img.shields.io/badge/C%23-000000?style=for-the-badge&logo=c-sharp&logoColor=white" alt="C#" />
+  <img src="https://img.shields.io/badge/C%2B%2B-000000?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++" />
+  <img src="https://img.shields.io/badge/Supabase-000000?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Firebase-000000?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase" />
+  <img src="https://img.shields.io/badge/React-000000?style=for-the-badge&logo=react&logoColor=white" alt="React" />
+  <img src="https://img.shields.io/badge/Jupyter-000000?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter Notebook" />
+  <img src="https://img.shields.io/badge/Lua-000000?style=for-the-badge&logo=lua&logoColor=white" alt="Lua" />
+  <img src="https://img.shields.io/badge/Go-000000?style=for-the-badge&logo=go&logoColor=white" alt="Go" />
+  <img src="https://img.shields.io/badge/Laravel-000000?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+  <img src="https://img.shields.io/badge/JavaScript-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/HTML5-000000?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-000000?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/Node.js-000000?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Docker-000000?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Kubernetes-000000?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
+  <img src="https://img.shields.io/badge/TensorFlow-000000?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow" />
+  <img src="https://img.shields.io/badge/Git-000000?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
 </div>
 
 ## Stats
 <div align="center">
 
-  ### Top Languages
-  ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=radical)
-
-  ### GitHub Streak
-  ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=radical)
-
-  ### GitHub Stats
-  ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=radical&count_private=true)
-
-  ### Top Pins
-  ![Top Pins](https://github-readme-stats.vercel.app/api/pin/?username=mel-cell&repo=[your-repo-name]&theme=radical)
-  <!-- Replace [your-repo-name] with an actual repo if desired -->
+| ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=dark) | ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=dark&count_private=true) |
+|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=dark) | ![Top Pins](https://github-readme-stats.vercel.app/api/pin/?username=mel-cell&repo=[your-repo-name]&theme=dark) <!-- Replace [your-repo-name] with an actual repo if desired --> |
 
 </div>
 
