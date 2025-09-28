@@ -10,7 +10,7 @@
 </div>
 
 
-<div align="center">
+<div align="center">  
   <strong>Hello! I'm mel-cell</strong> – a Web Developer, DevOps, and Machine Learning Engineer passionate about building innovative solutions.  
   <br/>
   <em>I thrive in dynamic environments, leading teams and delivering under pressure.</em>
@@ -51,11 +51,14 @@
 
 ## Stats
 <div align="center">
-
-| ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=dark) | ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=dark&count_private=true) |
-|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=dark) | ![Top Pins](https://github-readme-stats.vercel.app/api/pin/?username=mel-cell&repo=[your-repo-name]&theme=dark) <!-- Replace [your-repo-name] with an actual repo if desired --> |
-
+  <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=dark&width=400" alt="Top Languages" width="400" height="200">
+    <img src="https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=dark&count_private=true&width=400" alt="GitHub Stats" width="400" height="200">
+  </div>
+  <div style="display: flex; justify-content: space-around;">
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=dark&width=400" alt="GitHub Streak" width="400" height="200">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=mel-cell&repo=[your-repo-name]&theme=dark&width=400" alt="Top Pins" width="400" height="200"> <!-- Replace [your-repo-name] with an actual repo if desired -->
+  </div>
 </div>
 
 <div align="center">
