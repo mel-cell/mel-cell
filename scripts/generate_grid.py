@@ -3,7 +3,7 @@ import datetime
 import json
 import urllib.request
 import math
-from string import Template
+from collections import Counter
 
 # Configuration
 GITHUB_USERNAME = "mel-cell"
@@ -18,32 +18,87 @@ THEME = {
     "bar_bg": "#21262d"
 }
 
-def get_github_stats(username):
-    # Mock data - in a real implementation, fetch from GitHub API
+def fetch_json(url):
+    try:
+        req = urllib.request.Request(url)
+        # Add User-Agent to avoid 403 Forbidden
+        req.add_header('User-Agent', 'Python-Script')
+        
+        # Use GITHUB_TOKEN if available (for higher rate limits in Actions)
+        token = os.environ.get('GITHUB_TOKEN')
+        if token:
+            req.add_header('Authorization', f'token {token}')
+            
+        with urllib.request.urlopen(req) as response:
+            return json.loads(response.read().decode())
+    except Exception as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+
+def get_real_stats(username):
+    user_url = f"https://api.github.com/users/{username}"
+    repos_url = f"https://api.github.com/users/{username}/repos?per_page=100&type=owner"
+    
+    user_data = fetch_json(user_url)
+    repos_data = fetch_json(repos_url)
+    
+    if not user_data or not repos_data:
+        # Fallback if API fails
+        return {
+            "stats": {
+                "total_stars": 0,
+                "total_forks": 0,
+                "followers": 0,
+                "total_repos": 0,
+                "contributed_to": 0,
+                "current_streak": 0
+            },
+            "languages": []
+        }
+
+    # Calculate Stats
+    total_stars = sum(repo['stargazers_count'] for repo in repos_data)
+    total_forks = sum(repo['forks_count'] for repo in repos_data)
+    
+    # Calculate Languages
+    langs = [repo['language'] for repo in repos_data if repo['language']]
+    lang_counts = Counter(langs)
+    total_langs = sum(lang_counts.values())
+    
+    top_languages = []
+    colors = {
+        "Python": "#3572A5", "JavaScript": "#f1e05a", "Go": "#00ADD8", 
+        "HTML": "#e34c26", "CSS": "#563d7c", "Java": "#b07219",
+        "TypeScript": "#2b7489", "Vue": "#41b883", "Shell": "#89e051",
+        "C++": "#f34b7d", "C": "#555555", "PHP": "#4F5D95"
+    }
+    
+    for lang, count in lang_counts.most_common(5):
+        percent = math.floor((count / total_langs) * 100)
+        top_languages.append({
+            "name": lang,
+            "percent": percent,
+            "color": colors.get(lang, "#ccc")
+        })
+
     return {
-        "total_stars": 120,
-        "total_commits": 2138,
-        "total_prs": 51,
-        "total_issues": 12,
-        "total_repos": 35,
-        "contributed_to": 15,
-        "longest_streak": 24,
-        "current_streak": 5
+        "stats": {
+            "total_stars": total_stars,
+            "total_forks": total_forks,
+            "followers": user_data['followers'],
+            "total_repos": user_data['public_repos'],
+            "contributed_to": 0, # Hard to get via simple API
+            "current_streak": 0  # Hard to get via simple API
+        },
+        "languages": top_languages
     }
 
-def get_language_stats(username):
-    # Mock data - represents percentage or raw bytes
-    return [
-        {"name": "Python", "percent": 40, "color": "#3572A5"},
-        {"name": "JavaScript", "percent": 30, "color": "#f1e05a"},
-        {"name": "Go", "percent": 15, "color": "#00ADD8"},
-        {"name": "HTML/CSS", "percent": 10, "color": "#e34c26"},
-        {"name": "Other", "percent": 5, "color": "#ccc"}
-    ]
-
-def create_svg(stats, languages):
+def create_svg(data):
+    stats = data['stats']
+    languages = data['languages']
+    
     width = 800
-    height = 450 # Slightly taller for better spacing
+    height = 450
     
     svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg">
     <style>
@@ -58,7 +113,7 @@ def create_svg(stats, languages):
 
     # --- ROW 1 ---
 
-    # Card 1: Profile Identity (Top Left) - 250x140
+    # Card 1: Profile Identity
     svg += f'''
     <g transform="translate(20, 20)">
         <rect width="250" height="140" class="card"/>
@@ -67,55 +122,46 @@ def create_svg(stats, languages):
         
         <line x1="20" y1="85" x2="230" y2="85" stroke="{THEME['border']}" stroke-width="1"/>
         
-        <text x="20" y="115" class="text-dim" font-size="12">Repositories</text>
+        <text x="20" y="115" class="text-dim" font-size="12">Public Repos</text>
         <text x="230" y="115" class="text" font-size="16" font-weight="bold" text-anchor="end">{stats['total_repos']}</text>
     </g>
     '''
 
-    # Card 2: Key Metrics (Top Right) - 510x140
-    # Grid of 4 big stats
+    # Card 2: Key Metrics
     svg += f'''
     <g transform="translate(290, 20)">
         <rect width="490" height="140" class="card"/>
         
-        <!-- Stat 1: Commits -->
+        <!-- Stat 1: Stars -->
         <g transform="translate(30, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Total Commits</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_commits']}</text>
-        </g>
-        
-        <!-- Stat 2: Stars -->
-        <g transform="translate(150, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Stars Earned</text>
+            <text x="0" y="0" class="text-dim" font-size="12">Total Stars</text>
             <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_stars']}</text>
         </g>
         
-        <!-- Stat 3: PRs -->
-        <g transform="translate(270, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Pull Requests</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_prs']}</text>
+        <!-- Stat 2: Forks -->
+        <g transform="translate(150, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Total Forks</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_forks']}</text>
         </g>
         
-        <!-- Stat 4: Issues -->
-        <g transform="translate(390, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Issues Solved</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_issues']}</text>
+        <!-- Stat 3: Followers -->
+        <g transform="translate(270, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Followers</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['followers']}</text>
         </g>
         
         <!-- Divider -->
         <line x1="30" y1="80" x2="460" y2="80" stroke="{THEME['border']}" stroke-width="1"/>
         
-        <!-- Bottom Row of Stats (Smaller) -->
         <g transform="translate(30, 110)">
-             <text x="0" y="0" class="text-dim" font-size="12">Contributed to <tspan fill="{THEME['text_main']}" font-weight="bold">{stats['contributed_to']} Repos</tspan></text>
-             <text x="240" y="0" class="text-dim" font-size="12">Current Streak <tspan fill="{THEME['text_main']}" font-weight="bold">{stats['current_streak']} Days</tspan></text>
+             <text x="0" y="0" class="text-dim" font-size="12">Data updated automatically via <tspan fill="{THEME['text_main']}" font-weight="bold">GitHub Actions</tspan></text>
         </g>
     </g>
     '''
 
     # --- ROW 2 ---
 
-    # Card 3: Top Languages (Bottom Left) - 360x250
+    # Card 3: Top Languages
     svg += f'''
     <g transform="translate(20, 180)">
         <rect width="360" height="250" class="card"/>
@@ -141,26 +187,25 @@ def create_svg(stats, languages):
     </g>
     '''
 
-    # Card 4: Contribution Reach / Activity (Bottom Right) - 400x250
-    # Visualizing activity as a "Heatmap" style grid (Mocked)
+    # Card 4: Contribution Activity (Heatmap Visual)
     svg += f'''
     <g transform="translate(400, 180)">
         <rect width="380" height="250" class="card"/>
-        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Contribution Activity</text>
-        <text x="20" y="60" class="text-dim" font-size="12">Last 3 Months</text>
+        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Activity Visual</text>
+        <text x="20" y="60" class="text-dim" font-size="12">Recent Activity Pattern</text>
         
-        <!-- Mock Heatmap Grid -->
         <g transform="translate(20, 80)">
     '''
     
-    # Generate a 14x7 grid of squares
+    # Generate a decorative grid pattern
+    import random
+    random.seed(datetime.datetime.now().day) # Change pattern daily
+    
     for col in range(14):
         for row in range(7):
-            # Random opacity for effect
-            opacity = 0.2
-            if (col + row) % 3 == 0: opacity = 0.6
-            if (col * row) % 5 == 0: opacity = 0.9
-            if (col + row) % 7 == 0: opacity = 0.1
+            opacity = 0.1
+            if random.random() > 0.7: opacity = 0.6
+            if random.random() > 0.9: opacity = 0.9
             
             color = THEME['accent']
             svg += f'<rect x="{col * 24}" y="{row * 24}" width="18" height="18" fill="{color}" opacity="{opacity}" rx="2"/>'
@@ -174,9 +219,8 @@ def create_svg(stats, languages):
     return svg
 
 def main():
-    stats = get_github_stats(GITHUB_USERNAME)
-    languages = get_language_stats(GITHUB_USERNAME)
-    svg_content = create_svg(stats, languages)
+    data = get_real_stats(GITHUB_USERNAME)
+    svg_content = create_svg(data)
     
     with open(OUTPUT_FILE, "w") as f:
         f.write(svg_content)
