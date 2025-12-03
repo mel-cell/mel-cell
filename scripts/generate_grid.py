@@ -4,6 +4,7 @@ import json
 import urllib.request
 import math
 import random
+import base64
 from collections import Counter
 
 # Configuration
@@ -36,6 +37,15 @@ def fetch_json(url):
         print(f"Error fetching {url}: {e}")
         return None
 
+def get_local_image_base64(path):
+    try:
+        if os.path.exists(path):
+            with open(path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode()
+    except Exception as e:
+        print(f"Error reading image {path}: {e}")
+    return None
+
 def get_real_stats(username):
     user_url = f"https://api.github.com/users/{username}"
     repos_url = f"https://api.github.com/users/{username}/repos?per_page=100&type=owner"
@@ -45,19 +55,21 @@ def get_real_stats(username):
     
     if not user_data or not repos_data:
         return {
-            "stats": {"total_stars": 0, "total_forks": 0, "followers": 0, "total_repos": 0},
+            "stats": {"total_stars": 0, "total_forks": 0, "followers": 0, "total_repos": 0, "avatar": ""},
             "languages": []
         }
 
     total_stars = sum(repo['stargazers_count'] for repo in repos_data)
     total_forks = sum(repo['forks_count'] for repo in repos_data)
     
+    # Fetch Avatar from local assets
+    avatar_b64 = get_local_image_base64("assets/image.png")
+    
     langs = [repo['language'] for repo in repos_data if repo['language']]
     lang_counts = Counter(langs)
     total_langs = sum(lang_counts.values())
     
     top_languages = []
-    # Monochrome palette mapping based on rank
     mono_palette = [THEME['accent_1'], THEME['accent_2'], THEME['accent_3'], "#333333", "#222222"]
     
     for i, (lang, count) in enumerate(lang_counts.most_common(4)):
@@ -73,7 +85,8 @@ def get_real_stats(username):
             "total_stars": total_stars,
             "total_forks": total_forks,
             "followers": user_data['followers'],
-            "total_repos": user_data['public_repos']
+            "total_repos": user_data['public_repos'],
+            "avatar": avatar_b64
         },
         "languages": top_languages
     }
@@ -125,9 +138,8 @@ def create_svg(data):
     # Full Width Config
     width = 840  # Wider
     height = 400
-    padding = 0  # No outer padding
     
-    svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg">
+    svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style>
         .text {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: {THEME['text_main']}; }}
         .text-dim {{ fill: {THEME['text_dim']}; }}
@@ -140,13 +152,19 @@ def create_svg(data):
     col1_w = 340
     
     # Card 1: Profile (Top Left)
+    avatar_content = f'<image x="25" y="25" width="50" height="50" xlink:href="data:image/png;base64,{stats["avatar"]}" clip-path="url(#avatar-clip)" />' if stats['avatar'] else f'<circle cx="50" cy="50" r="25" fill="{THEME["border"]}"/><text x="50" y="58" text-anchor="middle" font-size="20">⚡</text>'
+    
     svg += f'''
+    <defs>
+        <clipPath id="avatar-clip">
+            <circle cx="50" cy="50" r="25" />
+        </clipPath>
+    </defs>
+    
     <g transform="translate(0, 0)">
         <rect width="{col1_w}" height="195" class="card" rx="20"/>
         
-        <!-- Avatar / Icon Placeholder -->
-        <circle cx="50" cy="50" r="25" fill="{THEME['border']}"/>
-        <text x="50" y="58" text-anchor="middle" font-size="20">⚡</text>
+        {avatar_content}
         
         <text x="90" y="45" class="text" font-size="24" font-weight="bold">{GITHUB_USERNAME}</text>
         <text x="90" y="70" class="text-dim" font-size="14">Full Stack Developer</text>
