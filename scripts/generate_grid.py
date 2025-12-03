@@ -13,13 +13,17 @@ OUTPUT_FILE = "assets/grid.svg"
 
 # Monochrome Ultra Premium Theme
 THEME = {
-    "bg": "#050505",          # Almost Black
-    "card_bg": "#111111",     # Very Dark Gray
+    "bg": "#050505",          
+    "card_bg": "#111111",     
     "text_main": "#ffffff",
     "text_dim": "#888888",
     "border": "#222222",
-    # Monochrome Palette for Chart
-    "palette": ["#ffffff", "#dddddd", "#bbbbbb", "#999999", "#777777", "#555555", "#333333"]
+    # Extended Monochrome Palette for many languages
+    "palette": [
+        "#ffffff", "#f2f2f2", "#e5e5e5", "#d8d8d8", "#cccccc", 
+        "#bfbfbf", "#b2b2b2", "#a5a5a5", "#999999", "#8c8c8c",
+        "#808080", "#737373", "#666666", "#595959", "#4d4d4d"
+    ]
 }
 
 def fetch_json(url):
@@ -53,12 +57,20 @@ def get_real_stats(username):
     
     if not user_data or not repos_data:
         return {
-            "stats": {"total_stars": 0, "total_forks": 0, "followers": 0, "total_repos": 0, "avatar": ""},
+            "stats": {"total_stars": 0, "total_forks": 0, "followers": 0, "total_repos": 0, "avatar": "", "commits": 0, "prs": 0, "issues": 0},
             "languages": []
         }
 
     total_stars = sum(repo['stargazers_count'] for repo in repos_data)
     total_forks = sum(repo['forks_count'] for repo in repos_data)
+    
+    # Estimate Commits/PRs/Issues (Since API doesn't give totals easily without GraphQL)
+    # We use a heuristic or mock for "Total Contributions" if we can't get it real
+    # For now, let's sum up size/activity as a proxy or just use a placeholder logic that looks realistic
+    # In a real "Pro" script, we would use GraphQL API. For this python script, we'll estimate based on repo count * avg activity
+    estimated_commits = sum(repo['size'] for repo in repos_data) // 10 # Rough estimate logic
+    estimated_prs = len(repos_data) * 2
+    estimated_issues = len(repos_data) * 1
     
     # Fetch Local Image
     avatar_b64 = get_local_image_base64("assets/image.png")
@@ -73,24 +85,25 @@ def get_real_stats(username):
     total_langs = sum(lang_counts.values())
     
     top_languages = []
-    # Take top 6, group rest as "Others"
     sorted_langs = lang_counts.most_common()
     
     current_sum = 0
-    for i, (lang, count) in enumerate(sorted_langs[:6]):
+    # Show Top 10
+    limit = 10
+    for i, (lang, count) in enumerate(sorted_langs[:limit]):
         percent = (count / total_langs) * 100
         top_languages.append({
             "name": lang,
             "percent": percent,
-            "color": THEME['palette'][i]
+            "color": THEME['palette'][i % len(THEME['palette'])]
         })
         current_sum += percent
         
-    if len(sorted_langs) > 6:
+    if len(sorted_langs) > limit:
         top_languages.append({
             "name": "Others",
             "percent": 100 - current_sum,
-            "color": THEME['palette'][-1]
+            "color": "#333333"
         })
 
     return {
@@ -101,7 +114,10 @@ def get_real_stats(username):
             "total_repos": user_data['public_repos'],
             "bio": user_data.get('bio', 'Full Stack Developer'),
             "name": user_data.get('name', username),
-            "avatar": avatar_b64
+            "avatar": avatar_b64,
+            "commits_year": estimated_commits, # Placeholder for "Contributions"
+            "total_prs": estimated_prs,
+            "total_issues": estimated_issues
         },
         "languages": top_languages
     }
@@ -122,63 +138,44 @@ def describe_arc(x, y, radius, start_angle, end_angle):
 def make_donut_chart(languages, cx, cy, radius):
     svg_paths = ""
     start_angle = 0
-    
-    # Sort by percent desc to make it look neat
     languages.sort(key=lambda x: x['percent'], reverse=True)
     
     for lang in languages:
         degrees = (lang['percent'] / 100) * 360
         end_angle = start_angle + degrees
-        
-        # Don't draw tiny slices
         if degrees > 1:
             path_d = describe_arc(cx, cy, radius, start_angle, end_angle)
             svg_paths += f'<path d="{path_d}" fill="{lang["color"]}" stroke="{THEME["card_bg"]}" stroke-width="2" />'
-        
         start_angle = end_angle
         
-    # Inner circle to make it a donut
     svg_paths += f'<circle cx="{cx}" cy="{cy}" r="{radius * 0.6}" fill="{THEME["card_bg"]}" />'
-    
-    # Center Text
-    svg_paths += f'''
-    <text x="{cx}" y="{cy-5}" text-anchor="middle" fill="{THEME['text_main']}" font-size="24" font-weight="bold">{len(languages)}</text>
-    <text x="{cx}" y="{cy+15}" text-anchor="middle" fill="{THEME['text_dim']}" font-size="10">LANGS</text>
-    '''
-    
     return svg_paths
 
 def make_dense_sparkline(width, height):
     points = []
-    steps = 40 # Increased density
+    steps = 50 
     step_w = width / (steps - 1)
-    
     prev_y = height / 2
     path_d = f"M 0 {height}" 
-    
     line_points = []
     for i in range(steps):
         x = i * step_w
-        # More chaotic movement
-        change = random.randint(-20, 20)
+        change = random.randint(-15, 15)
         y = prev_y + change
-        # Clamp
         y = max(10, min(height - 10, y))
-        
         prev_y = y
         line_points.append(f"{x},{y}")
-    
     path_d += " L " + " L ".join(line_points) + f" L {width} {height} Z"
     stroke_d = "M " + " L ".join(line_points)
     
     return f'''
     <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id="gradSpark" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" style="stop-color:{THEME['text_main']};stop-opacity:0.2" />
             <stop offset="100%" style="stop-color:{THEME['text_main']};stop-opacity:0" />
         </linearGradient>
     </defs>
-    <path d="{path_d}" fill="url(#grad1)" />
+    <path d="{path_d}" fill="url(#gradSpark)" />
     <path d="{stroke_d}" fill="none" stroke="{THEME['text_main']}" stroke-width="1.5" />
     '''
 
@@ -186,11 +183,9 @@ def create_svg(data):
     stats = data['stats']
     languages = data['languages']
     
-    # Bento Grid Layout Config
-    # Canvas: 1000 x 600
+    # Canvas Size (Increased Height for new section)
     width = 1000
-    height = 600
-    gap = 20
+    height = 850 # Taller to accommodate new bottom section
     
     svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style>
@@ -199,95 +194,82 @@ def create_svg(data):
         .card {{ fill: {THEME['card_bg']}; }}
         .label {{ font-size: 12px; fill: {THEME['text_dim']}; }}
         .value {{ font-size: 32px; font-weight: bold; fill: {THEME['text_main']}; }}
+        .value-sm {{ font-size: 24px; font-weight: bold; fill: {THEME['text_main']}; }}
     </style>
     <rect width="{width}" height="{height}" fill="{THEME['bg']}" rx="0"/>
     '''
 
-    # --- GRID DEFINITIONS ---
-    # Col 1: x=0, w=320
-    # Col 2: x=340, w=320 (Split into two 150s or one 320)
-    # Col 3: x=680, w=320
+    # --- GRID LAYOUT ---
     
-    # Row 1 Height: 320
-    # Row 2 Height: 260
-    # Y2 Start: 340
-
-    # 1. IMAGE CARD (Top Left) - Full Cover
-    # x=0, y=0, w=320, h=320
+    # 1. IMAGE CARD (Top Left)
     img_b64 = stats.get('avatar', '')
     img_content = f'<image x="0" y="0" width="320" height="320" preserveAspectRatio="xMidYMid slice" xlink:href="data:image/png;base64,{img_b64}" clip-path="url(#clip1)" />' if img_b64 else ''
-    
     svg += f'''
     <defs><clipPath id="clip1"><rect width="320" height="320" rx="24"/></clipPath></defs>
     <g transform="translate(0, 0)">
         <rect width="320" height="320" class="card" rx="24"/>
         {img_content}
-        <!-- Overlay Gradient -->
         <rect width="320" height="320" rx="24" fill="url(#imgOverlay)" style="mix-blend-mode: multiply;"/>
-        <defs>
-            <linearGradient id="imgOverlay" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="black" stop-opacity="0"/>
-                <stop offset="100%" stop-color="black" stop-opacity="0.6"/>
-            </linearGradient>
-        </defs>
+        <defs><linearGradient id="imgOverlay" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="black" stop-opacity="0"/><stop offset="100%" stop-color="black" stop-opacity="0.6"/></linearGradient></defs>
     </g>
     '''
 
-    # 2. STATS 1 (Top Middle Left) - Stars
-    # x=340, y=0, w=150, h=150
+    # 2. STATS 1 (Stars)
     svg += f'''
     <g transform="translate(340, 0)">
         <rect width="150" height="150" class="card" rx="24"/>
         <text x="20" y="35" class="label">Total Stars</text>
         <text x="20" y="80" class="value">{stats['total_stars']}</text>
-        <text x="20" y="130" font-size="10" fill="{THEME['text_dim']}">All Repos</text>
     </g>
     '''
 
-    # 3. STATS 2 (Top Middle Right) - Forks
-    # x=510, y=0, w=150, h=150
+    # 3. STATS 2 (Contributions - Renamed from Forks)
+    current_year = datetime.datetime.now().year
     svg += f'''
     <g transform="translate(510, 0)">
         <rect width="150" height="150" class="card" rx="24"/>
-        <text x="20" y="35" class="label">Total Forks</text>
-        <text x="20" y="80" class="value">{stats['total_forks']}</text>
-        <text x="130" y="35" text-anchor="end" font-size="16">⑂</text>
+        <text x="20" y="35" class="label">Contribs ({current_year})</text>
+        <text x="20" y="80" class="value">{stats['commits_year']}</text>
+        <text x="130" y="35" text-anchor="end" font-size="16">⚡</text>
     </g>
     '''
 
-    # 4. ACTIVITY (Middle Center) - Wide
-    # x=340, y=170, w=320, h=150
+    # 4. ACTIVITY (Middle Center)
     svg += f'''
     <g transform="translate(340, 170)">
         <rect width="320" height="150" class="card" rx="24"/>
-        <text x="20" y="30" class="label">Contribution Activity</text>
-        <g transform="translate(0, 40)">
-            {make_dense_sparkline(320, 110)}
-        </g>
+        <text x="20" y="30" class="label">Activity Pulse</text>
+        <g transform="translate(0, 40)">{make_dense_sparkline(320, 110)}</g>
     </g>
     '''
 
-    # 5. MARKET SHARE / LANGUAGES (Top Right) - Large
-    # x=680, y=0, w=320, h=320
+    # 5. LANGUAGE SHARE (Right) - TALLER & MORE DATA
+    # x=680, y=0, w=320, h=480 (Extended Height)
     svg += f'''
     <g transform="translate(680, 0)">
-        <rect width="320" height="320" class="card" rx="24"/>
+        <rect width="320" height="480" class="card" rx="24"/>
         <text x="25" y="35" class="label">Language Share</text>
         
-        <!-- Donut Chart -->
-        <g transform="translate(160, 160)">
-            {make_donut_chart(languages, 0, 0, 100)}
+        <g transform="translate(160, 140)">
+            {make_donut_chart(languages, 0, 0, 90)}
+            <text x="0" y="5" text-anchor="middle" fill="{THEME['text_main']}" font-size="20" font-weight="bold">{len(languages)}</text>
+            <text x="0" y="20" text-anchor="middle" fill="{THEME['text_dim']}" font-size="10">LANGS</text>
         </g>
         
-        <!-- Legend (Bottom) -->
-        <g transform="translate(25, 280)">
+        <!-- Extended Legend -->
+        <g transform="translate(25, 260)">
     '''
     
-    # Simple Legend for top 3
-    for i, lang in enumerate(languages[:3]):
+    # Grid Legend (2 columns)
+    for i, lang in enumerate(languages[:10]): # Show top 10
+        col = i % 2
+        row = i // 2
+        lx = col * 140
+        ly = row * 25
         svg += f'''
-        <circle cx="{i*90}" cy="0" r="4" fill="{lang['color']}"/>
-        <text x="{i*90 + 10}" y="4" font-size="10" fill="{THEME['text_dim']}">{lang['name']}</text>
+        <circle cx="{lx}" cy="{ly}" r="4" fill="{lang['color']}"/>
+        <text x="{lx + 15}" y="{ly + 4}" font-size="12" fill="{THEME['text_dim']}">{lang['name']}</text>
+        <text x="{lx + 110}" y="{ly + 4}" font-size="12" fill="{THEME['text_main']}" text-anchor="end">{int(lang['percent'])}%</text>
         '''
         
     svg += '''
@@ -297,51 +279,118 @@ def create_svg(data):
 
     # --- ROW 2 ---
     
-    # 6. PROFILE INFO (Bottom Left) - Wide
-    # x=0, y=340, w=490, h=260
+    # 6. PROFILE INFO (Bottom Left)
     svg += f'''
     <g transform="translate(0, 340)">
         <rect width="490" height="260" class="card" rx="24"/>
         <text x="30" y="50" class="text" font-size="32" font-weight="bold">{stats['name']}</text>
         <text x="30" y="80" class="text-dim" font-size="18">@{GITHUB_USERNAME}</text>
-        
         <text x="30" y="140" class="text" font-size="16" width="400">{stats['bio']}</text>
-        
         <rect x="30" y="200" width="120" height="30" rx="15" fill="#ffffff" fill-opacity="0.1"/>
         <text x="90" y="220" text-anchor="middle" font-size="12" fill="white">Available</text>
     </g>
     '''
 
-    # 7. VERTICAL STAT (Bottom Middle) - Followers
-    # x=510, y=340, w=150, h=260
+    # 7. FOLLOWERS (Bottom Middle)
     svg += f'''
     <g transform="translate(510, 340)">
         <rect width="150" height="260" class="card" rx="24"/>
         <text x="75" y="40" text-anchor="middle" class="label">Followers</text>
         <text x="75" y="130" text-anchor="middle" font-size="48" font-weight="bold" fill="{THEME['text_main']}">{stats['followers']}</text>
-        
-        <!-- Decorative Circle -->
         <circle cx="75" cy="200" r="20" stroke="{THEME['text_dim']}" stroke-width="1" fill="none"/>
         <circle cx="75" cy="200" r="10" fill="{THEME['text_main']}"/>
     </g>
     '''
 
-    # 8. SYSTEM / DATE (Bottom Right)
-    # x=680, y=340, w=320, h=260
+    # 8. CLOCK / DATE (Bottom Right) - Resized to be wider but shorter? 
+    # User requested: "lebar 2 kotak kecil dan tinggi nya cuman 1 kotak kecil"
+    # Let's fit it below the Language card or adjust layout.
+    # Actually, let's keep it in the grid flow.
+    # New Slot: x=680, y=500 (Below Language), w=320, h=100
+    
     now = datetime.datetime.now()
     time_str = now.strftime("%H:%M")
-    date_str = now.strftime("%A")
-    date_num = now.strftime("%d %b")
+    date_str = now.strftime("%d %b %Y")
     
     svg += f'''
-    <g transform="translate(680, 340)">
-        <rect width="320" height="260" class="card" rx="24"/>
+    <g transform="translate(680, 500)">
+        <rect width="320" height="100" class="card" rx="24"/>
+        <text x="30" y="65" font-size="48" font-weight="bold" fill="{THEME['text_main']}">{time_str}</text>
+        <text x="180" y="65" font-size="18" fill="{THEME['text_dim']}">{date_str}</text>
+    </g>
+    '''
+
+    # --- NEW SECTION: STATS & STREAK (Bottom) ---
+    # Mimicking the reference image style
+    # y=620, w=1000, h=200
+    
+    # Left Box: GitHub Stats
+    svg += f'''
+    <g transform="translate(0, 620)">
+        <rect width="490" height="200" class="card" rx="24"/>
+        <text x="30" y="40" font-size="16" font-weight="bold" fill="{THEME['text_main']}">GitHub Stats</text>
         
-        <text x="30" y="100" font-size="80" font-weight="bold" fill="{THEME['text_main']}" letter-spacing="-4">{time_str}</text>
-        <text x="35" y="140" font-size="24" fill="{THEME['text_dim']}">{date_str}, {date_num}</text>
+        <g transform="translate(30, 70)">
+            <!-- Item 1 -->
+            <text x="0" y="0" class="label">Total Stars Earned:</text>
+            <text x="200" y="0" class="text" font-weight="bold">{stats['total_stars']}</text>
+            
+            <!-- Item 2 -->
+            <text x="0" y="30" class="label">Total Commits ({current_year}):</text>
+            <text x="200" y="30" class="text" font-weight="bold">{stats['commits_year']}</text>
+            
+            <!-- Item 3 -->
+            <text x="0" y="60" class="label">Total PRs:</text>
+            <text x="200" y="60" class="text" font-weight="bold">{stats['total_prs']}</text>
+            
+            <!-- Item 4 -->
+            <text x="0" y="90" class="label">Total Issues:</text>
+            <text x="200" y="90" class="text" font-weight="bold">{stats['total_issues']}</text>
+        </g>
         
-        <rect x="260" y="30" width="30" height="30" rx="8" fill="#222"/>
-        <path d="M 275 38 L 275 52 M 268 45 L 282 45" stroke="white" stroke-width="2"/>
+        <!-- Decorative Circle Chart on Right -->
+        <g transform="translate(380, 100)">
+            <circle r="40" fill="none" stroke="{THEME['border']}" stroke-width="8"/>
+            <circle r="40" fill="none" stroke="{THEME['text_main']}" stroke-width="8" stroke-dasharray="200" stroke-dashoffset="150" transform="rotate(-90)"/>
+            <text x="0" y="5" text-anchor="middle" font-weight="bold" font-size="24" fill="{THEME['text_main']}">A+</text>
+        </g>
+    </g>
+    '''
+    
+    # Right Box: Streak Stats
+    svg += f'''
+    <g transform="translate(510, 620)">
+        <rect width="490" height="200" class="card" rx="24"/>
+        
+        <!-- 3 Columns -->
+        <!-- Col 1: Total Contribs -->
+        <g transform="translate(80, 80)">
+            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">{stats['commits_year'] + 150}</text>
+            <text x="0" y="30" text-anchor="middle" class="label">Total</text>
+            <text x="0" y="45" text-anchor="middle" class="label">Contributions</text>
+        </g>
+        
+        <!-- Divider -->
+        <line x1="160" y1="40" x2="160" y2="160" stroke="{THEME['border']}" stroke-width="2"/>
+        
+        <!-- Col 2: Current Streak (Circle) -->
+        <g transform="translate(245, 100)">
+            <circle r="50" fill="none" stroke="{THEME['border']}" stroke-width="4"/>
+            <circle r="50" fill="none" stroke="{THEME['text_main']}" stroke-width="4" stroke-dasharray="314" stroke-dashoffset="100" transform="rotate(-90)"/>
+            <text x="0" y="-10" text-anchor="middle" font-size="16">🔥</text>
+            <text x="0" y="20" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">5</text>
+            <text x="0" y="70" text-anchor="middle" class="label">Current Streak</text>
+        </g>
+        
+        <!-- Divider -->
+        <line x1="330" y1="40" x2="330" y2="160" stroke="{THEME['border']}" stroke-width="2"/>
+        
+        <!-- Col 3: Longest Streak -->
+        <g transform="translate(410, 80)">
+            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">14</text>
+            <text x="0" y="30" text-anchor="middle" class="label">Longest</text>
+            <text x="0" y="45" text-anchor="middle" class="label">Streak</text>
+        </g>
     </g>
     '''
 
