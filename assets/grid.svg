@@ -1,0 +1,113 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #ffffff; }
+        .text-dim { fill: #8b949e; }
+        .text-accent { fill: #ffffff; }
+        .card { fill: #161b22; stroke: #30363d; stroke-width: 1; rx: 10; }
+        .bar-bg { fill: #21262d; rx: 4; }
+    </style>
+    <rect width="800" height="450" fill="#0d1117" rx="15"/>
+    
+    <g transform="translate(20, 20)">
+        <rect width="250" height="140" class="card"/>
+        <text x="20" y="40" class="text" font-size="22" font-weight="bold">mel-cell</text>
+        <text x="20" y="65" class="text-dim" font-size="14">Full Stack Developer</text>
+        
+        <line x1="20" y1="85" x2="230" y2="85" stroke="#30363d" stroke-width="1"/>
+        
+        <text x="20" y="115" class="text-dim" font-size="12">Repositories</text>
+        <text x="230" y="115" class="text" font-size="16" font-weight="bold" text-anchor="end">35</text>
+    </g>
+    
+    <g transform="translate(290, 20)">
+        <rect width="490" height="140" class="card"/>
+        
+        <!-- Stat 1: Commits -->
+        <g transform="translate(30, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Total Commits</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">2138</text>
+        </g>
+        
+        <!-- Stat 2: Stars -->
+        <g transform="translate(150, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Stars Earned</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">120</text>
+        </g>
+        
+        <!-- Stat 3: PRs -->
+        <g transform="translate(270, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Pull Requests</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">51</text>
+        </g>
+        
+        <!-- Stat 4: Issues -->
+        <g transform="translate(390, 35)">
+            <text x="0" y="0" class="text-dim" font-size="12">Issues Solved</text>
+            <text x="0" y="25" class="text" font-size="28" font-weight="bold">12</text>
+        </g>
+        
+        <!-- Divider -->
+        <line x1="30" y1="80" x2="460" y2="80" stroke="#30363d" stroke-width="1"/>
+        
+        <!-- Bottom Row of Stats (Smaller) -->
+        <g transform="translate(30, 110)">
+             <text x="0" y="0" class="text-dim" font-size="12">Contributed to <tspan fill="#ffffff" font-weight="bold">15 Repos</tspan></text>
+             <text x="240" y="0" class="text-dim" font-size="12">Current Streak <tspan fill="#ffffff" font-weight="bold">5 Days</tspan></text>
+        </g>
+    </g>
+    
+    <g transform="translate(20, 180)">
+        <rect width="360" height="250" class="card"/>
+        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Top Languages</text>
+        
+        <g transform="translate(20, 70)">
+    
+            <g transform="translate(0, 0)">
+                <text x="0" y="0" class="text" font-size="12">Python</text>
+                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">40%</text>
+                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
+                <rect x="0" y="10" width="128.0" height="8" fill="#3572A5" rx="4"/>
+            </g>
+        
+            <g transform="translate(0, 35)">
+                <text x="0" y="0" class="text" font-size="12">JavaScript</text>
+                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">30%</text>
+                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
+                <rect x="0" y="10" width="96.0" height="8" fill="#f1e05a" rx="4"/>
+            </g>
+        
+            <g transform="translate(0, 70)">
+                <text x="0" y="0" class="text" font-size="12">Go</text>
+                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">15%</text>
+                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
+                <rect x="0" y="10" width="48.0" height="8" fill="#00ADD8" rx="4"/>
+            </g>
+        
+            <g transform="translate(0, 105)">
+                <text x="0" y="0" class="text" font-size="12">HTML/CSS</text>
+                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">10%</text>
+                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
+                <rect x="0" y="10" width="32.0" height="8" fill="#e34c26" rx="4"/>
+            </g>
+        
+            <g transform="translate(0, 140)">
+                <text x="0" y="0" class="text" font-size="12">Other</text>
+                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">5%</text>
+                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
+                <rect x="0" y="10" width="16.0" height="8" fill="#ccc" rx="4"/>
+            </g>
+        
+        </g>
+    </g>
+    
+    <g transform="translate(400, 180)">
+        <rect width="380" height="250" class="card"/>
+        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Contribution Activity</text>
+        <text x="20" y="60" class="text-dim" font-size="12">Last 3 Months</text>
+        
+        <!-- Mock Heatmap Grid -->
+        <g transform="translate(20, 80)">
+    <rect x="0" y="0" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="0" y="24" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="0" y="48" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="0" y="72" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="0" y="96" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="0" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="0" y="144" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="24" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="24" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="24" y="48" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="24" y="72" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="24" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="24" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="24" y="144" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="48" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="48" y="24" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="48" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="48" y="72" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="48" y="96" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="48" y="120" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="48" y="144" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="72" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="72" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="72" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="72" y="72" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="72" y="96" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="72" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="72" y="144" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="96" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="96" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="96" y="48" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="96" y="72" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="96" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="96" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="96" y="144" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="120" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="120" y="24" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="120" y="48" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="120" y="72" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="120" y="96" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="120" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="120" y="144" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="144" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="144" y="24" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="144" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="144" y="72" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="144" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="144" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="144" y="144" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="168" y="0" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="168" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="168" y="48" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="168" y="72" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="168" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="168" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="168" y="144" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="192" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="192" y="24" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="192" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="192" y="72" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="192" y="96" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="192" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="192" y="144" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="216" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="216" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="216" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="216" y="72" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="216" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="216" y="120" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="216" y="144" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="240" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="240" y="24" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="240" y="48" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="240" y="72" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="240" y="96" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="240" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="240" y="144" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="264" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="264" y="24" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="264" y="48" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="264" y="72" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="264" y="96" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="264" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="264" y="144" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="288" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="288" y="24" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="288" y="48" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="288" y="72" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="288" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="288" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="288" y="144" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="312" y="0" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="312" y="24" width="18" height="18" fill="#ffffff" opacity="0.1" rx="2"/><rect x="312" y="48" width="18" height="18" fill="#ffffff" opacity="0.6" rx="2"/><rect x="312" y="72" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="312" y="96" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/><rect x="312" y="120" width="18" height="18" fill="#ffffff" opacity="0.9" rx="2"/><rect x="312" y="144" width="18" height="18" fill="#ffffff" opacity="0.2" rx="2"/>
+        </g>
+    </g>
+    </svg>
