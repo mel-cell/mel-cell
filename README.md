@@ -1,78 +1,97 @@
-# Welcome to mel-cell's GitHub   <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="30px"/>
-
-
 <div align="center">
-  <img src="https://i.pinimg.com/736x/66/5d/53/665d530753fd00e1dd3830f5a463d640.jpg" alt="Mountain Landscape Banner" width="100%"/>
-  <br/>
-<div align="center">
-  <a href="#technologies">Technologies</a> •
-  <a href="#stats">Stats</a>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0d1117&height=300&section=header&text=mel-cell&fontSize=90&animation=fadeIn&fontAlignY=38&desc=Building%20Things%20on%20Linux&descAlignY=51&descAlign=62" width="100%"/>
 </div>
 
-
-<div align="center">  
-<br/>
-  <strong>Hello! I'm mel-cell</strong> – a Web Developer, DevOps, and Machine Learning Engineer passionate about building innovative solutions.  
-  <br/>
-  <em>I thrive in dynamic environments, leading teams and delivering under pressure.</em>
-  <br/><br/>
-  <strong>Skills:</strong> Team Lead, Working Under Pressure  
-  <br/><br/>
-</div>
-
-## Technologies
 <div align="center">
-  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
-  <img src="https://img.shields.io/badge/Python-000000?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/XML-000000?style=for-the-badge&logo=xml&logoColor=white" alt="XML" />
-  <img src="https://img.shields.io/badge/PostgreSQL-000000?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/MariaDB-000000?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB" />
-  <img src="https://img.shields.io/badge/MySQL-000000?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-000000?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Bootstrap-000000?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
-  <img src="https://img.shields.io/badge/Linux-000000?style=for-the-badge&logo=linux&logoColor=white" alt="Linux" />
-  <img src="https://img.shields.io/badge/C%23-000000?style=for-the-badge&logo=c-sharp&logoColor=white" alt="C#" />
-  <img src="https://img.shields.io/badge/C%2B%2B-000000?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++" />
-  <img src="https://img.shields.io/badge/Supabase-000000?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Firebase-000000?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase" />
-  <img src="https://img.shields.io/badge/React-000000?style=for-the-badge&logo=react&logoColor=white" alt="React" />
-  <img src="https://img.shields.io/badge/Jupyter-000000?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter Notebook" />
-  <img src="https://img.shields.io/badge/Lua-000000?style=for-the-badge&logo=lua&logoColor=white" alt="Lua" />
-  <img src="https://img.shields.io/badge/Go-000000?style=for-the-badge&logo=go&logoColor=white" alt="Go" />
-  <img src="https://img.shields.io/badge/Laravel-000000?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
-  <img src="https://img.shields.io/badge/JavaScript-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/HTML5-000000?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-000000?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/Node.js-000000?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Docker-000000?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
-  <img src="https://img.shields.io/badge/Kubernetes-000000?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
-  <img src="https://img.shields.io/badge/TensorFlow-000000?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow" />
-  <img src="https://img.shields.io/badge/Git-000000?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=38BDF8&center=true&vCenter=true&width=500&lines=Full+Stack+Developer;C%23+%26+Desktop+App+Enthusiast;Linux+Power+User+(Arch%2FFedora);Always+Learning+Something+New" alt="Typing SVG" />
+  </a>
 </div>
+
+<div align="center">
+  <a href="mailto:emailmu@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+  <a href="https://linkedin.com/in/username-kamu">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="https://instagram.com/username-kamu">
+    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+  </a>
+</div>
+
 <br/>
 
-## Stats
 <div align="center">
-  <div style="display: flex; justify-content: space-around; gap: 0; margin-bottom: 20px;">
-    <img src="https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=dark&count_private=true" alt="GitHub Stats" style="width: 400px; height: 200px; object-fit: cover;">
-    <img src="https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=dark" alt="GitHub Streak" style="width: 400px; height: 200px; object-fit: cover;">
-  </div>
-</div>
-
-<div align="center">
-  <img src="https://komarev.com/ghpvc/?username=mel-cell&style=plastic&color=blue" alt="Profile Views" />
-</div>
-
-### Contribution Graph
-<div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=mel-cell&theme=react-dark&hide_border=true" alt="Contribution Graph" />
-</div>
-
-<div align="center">
-  <img src="https://img.shields.io/badge/⭐-Star%20Me!-000?style=for-the-badge&logo=github&logoColor=white" alt="Star Me" />
+  Thinking about code, design, and system architecture. <br/> 
+  Currently focusing on <strong>Desktop Apps (Avalonia/C#)</strong> and <strong>Modern Web (Laravel/Next.js)</strong>.
 </div>
 
 ---
+
+### 🛠️ Technologies & Tools
+
 <div align="center">
-  <em>Thanks for visiting! 🚀</em>
+  <table align="center">
+    <tr>
+      <td align="center" width="120"><strong>Languages</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+        <img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white" />
+        <img src="https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white" />
+        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
+        <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="120"><strong>Frontend</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" />
+        <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+        <img src="https://img.shields.io/badge/Tailwind-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" />
+        <img src="https://img.shields.io/badge/Avalonia_UI-BF202F?style=flat-square&logo=avalonia&logoColor=white" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="120"><strong>Backend</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Laravel-FF2D20?style=flat-square&logo=laravel&logoColor=white" />
+        <img src="https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white" />
+        <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="120"><strong>DevOps / OS</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black" />
+        <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
+        <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+
+### 📊 GitHub Stats
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=mel-cell&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" height="165" alt="stats graph" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=mel-cell&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" height="165" alt="Top Languages" />
+  
+  <br/>
+  
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=mel-cell&theme=tokyonight&hide_border=true" height="170" alt="streak graph" />
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=mel-cell&theme=tokyo-night&hide_border=true&area=true" width="100%" alt="Activity Graph" />
+</div>
+
+<br/>
+
+<div align="center">
+ <img src="https://komarev.com/ghpvc/?username=mel-cell&style=flat-square&color=blue" alt="Profile Views" />
 </div>
