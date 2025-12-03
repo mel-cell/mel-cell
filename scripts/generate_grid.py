@@ -18,7 +18,6 @@ THEME = {
     "text_main": "#ffffff",
     "text_dim": "#888888",
     "border": "#222222",
-    # Extended Monochrome Palette for many languages
     "palette": [
         "#ffffff", "#f2f2f2", "#e5e5e5", "#d8d8d8", "#cccccc", 
         "#bfbfbf", "#b2b2b2", "#a5a5a5", "#999999", "#8c8c8c",
@@ -39,6 +38,25 @@ def fetch_json(url):
         print(f"Error fetching {url}: {e}")
         return None
 
+def fetch_graphql(query, variables):
+    url = "https://api.github.com/graphql"
+    token = os.environ.get('GITHUB_TOKEN')
+    if not token:
+        print("Error: GITHUB_TOKEN is missing. Cannot fetch GraphQL data.")
+        return None
+        
+    data = json.dumps({"query": query, "variables": variables}).encode('utf-8')
+    try:
+        req = urllib.request.Request(url, data=data, method='POST')
+        req.add_header('User-Agent', 'Python-Script')
+        req.add_header('Authorization', f'bearer {token}')
+        req.add_header('Content-Type', 'application/json')
+        with urllib.request.urlopen(req) as response:
+            return json.loads(response.read().decode())
+    except Exception as e:
+        print(f"Error fetching GraphQL: {e}")
+        return None
+
 def get_local_image_base64(path):
     try:
         if os.path.exists(path):
@@ -48,7 +66,48 @@ def get_local_image_base64(path):
         print(f"Error reading image {path}: {e}")
     return None
 
+def calculate_streaks(weeks):
+    # Flatten the weeks into a single list of days
+    days = []
+    for week in weeks:
+        days.extend(week['contributionDays'])
+    
+    # Sort by date just in case
+    days.sort(key=lambda x: x['date'])
+    
+    current_streak = 0
+    longest_streak = 0
+    temp_streak = 0
+    
+    # Check if today has contributions to start the current streak count correctly
+    today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    
+    # Iterate backwards for current streak
+    for day in reversed(days):
+        if day['contributionCount'] > 0:
+            current_streak += 1
+        else:
+            # If it's today and 0, we don't break yet (streak might be from yesterday)
+            if day['date'] == today_str:
+                continue
+            break
+            
+    # Iterate forward for longest streak
+    for day in days:
+        if day['contributionCount'] > 0:
+            temp_streak += 1
+        else:
+            if temp_streak > longest_streak:
+                longest_streak = temp_streak
+            temp_streak = 0
+    # Final check
+    if temp_streak > longest_streak:
+        longest_streak = temp_streak
+        
+    return current_streak, longest_streak
+
 def get_real_stats(username):
+    # 1. REST API for basic stats
     user_url = f"https://api.github.com/users/{username}"
     repos_url = f"https://api.github.com/users/{username}/repos?per_page=100&type=owner"
     
@@ -64,13 +123,48 @@ def get_real_stats(username):
     total_stars = sum(repo['stargazers_count'] for repo in repos_data)
     total_forks = sum(repo['forks_count'] for repo in repos_data)
     
-    # Estimate Commits/PRs/Issues (Since API doesn't give totals easily without GraphQL)
-    # We use a heuristic or mock for "Total Contributions" if we can't get it real
-    # For now, let's sum up size/activity as a proxy or just use a placeholder logic that looks realistic
-    # In a real "Pro" script, we would use GraphQL API. For this python script, we'll estimate based on repo count * avg activity
-    estimated_commits = sum(repo['size'] for repo in repos_data) // 10 # Rough estimate logic
-    estimated_prs = len(repos_data) * 2
-    estimated_issues = len(repos_data) * 1
+    # 2. GraphQL API for Real Contributions & Streaks
+    query = """
+    query($userName:String!) {
+      user(login: $userName) {
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                contributionCount
+                date
+              }
+            }
+          }
+          totalCommitContributions
+          totalPullRequestContributions
+          totalIssueContributions
+        }
+      }
+    }
+    """
+    
+    gql_data = fetch_graphql(query, {"userName": username})
+    
+    # Default values if GraphQL fails
+    total_contributions = 0
+    current_streak = 0
+    longest_streak = 0
+    total_commits = 0
+    total_prs = 0
+    total_issues = 0
+    
+    if gql_data and 'data' in gql_data and 'user' in gql_data['data']:
+        contrib_data = gql_data['data']['user']['contributionsCollection']
+        calendar = contrib_data['contributionCalendar']
+        
+        total_contributions = calendar['totalContributions']
+        total_commits = contrib_data['totalCommitContributions']
+        total_prs = contrib_data['totalPullRequestContributions']
+        total_issues = contrib_data['totalIssueContributions']
+        
+        current_streak, longest_streak = calculate_streaks(calendar['weeks'])
     
     # Fetch Local Image
     avatar_b64 = get_local_image_base64("assets/image.png")
@@ -88,7 +182,6 @@ def get_real_stats(username):
     sorted_langs = lang_counts.most_common()
     
     current_sum = 0
-    # Show Top 10
     limit = 10
     for i, (lang, count) in enumerate(sorted_langs[:limit]):
         percent = (count / total_langs) * 100
@@ -115,9 +208,12 @@ def get_real_stats(username):
             "bio": user_data.get('bio', 'Full Stack Developer'),
             "name": user_data.get('name', username),
             "avatar": avatar_b64,
-            "commits_year": estimated_commits, # Placeholder for "Contributions"
-            "total_prs": estimated_prs,
-            "total_issues": estimated_issues
+            "total_contributions": total_contributions,
+            "current_streak": current_streak,
+            "longest_streak": longest_streak,
+            "total_commits": total_commits,
+            "total_prs": total_prs,
+            "total_issues": total_issues
         },
         "languages": top_languages
     }
@@ -183,9 +279,8 @@ def create_svg(data):
     stats = data['stats']
     languages = data['languages']
     
-    # Canvas Size (Increased Height for new section)
     width = 1000
-    height = 850 # Taller to accommodate new bottom section
+    height = 850 
     
     svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style>
@@ -228,8 +323,8 @@ def create_svg(data):
     svg += f'''
     <g transform="translate(510, 0)">
         <rect width="150" height="150" class="card" rx="24"/>
-        <text x="20" y="35" class="label">Contribs ({current_year})</text>
-        <text x="20" y="80" class="value">{stats['commits_year']}</text>
+        <text x="20" y="35" class="label">Contribs (Year)</text>
+        <text x="20" y="80" class="value">{stats['total_contributions']}</text>
         <text x="130" y="35" text-anchor="end" font-size="16">⚡</text>
     </g>
     '''
@@ -243,8 +338,7 @@ def create_svg(data):
     </g>
     '''
 
-    # 5. LANGUAGE SHARE (Right) - TALLER & MORE DATA
-    # x=680, y=0, w=320, h=480 (Extended Height)
+    # 5. LANGUAGE SHARE (Right)
     svg += f'''
     <g transform="translate(680, 0)">
         <rect width="320" height="480" class="card" rx="24"/>
@@ -256,12 +350,10 @@ def create_svg(data):
             <text x="0" y="20" text-anchor="middle" fill="{THEME['text_dim']}" font-size="10">LANGS</text>
         </g>
         
-        <!-- Extended Legend -->
         <g transform="translate(25, 260)">
     '''
     
-    # Grid Legend (2 columns)
-    for i, lang in enumerate(languages[:10]): # Show top 10
+    for i, lang in enumerate(languages[:10]): 
         col = i % 2
         row = i // 2
         lx = col * 140
@@ -302,12 +394,7 @@ def create_svg(data):
     </g>
     '''
 
-    # 8. CLOCK / DATE (Bottom Right) - Resized to be wider but shorter? 
-    # User requested: "lebar 2 kotak kecil dan tinggi nya cuman 1 kotak kecil"
-    # Let's fit it below the Language card or adjust layout.
-    # Actually, let's keep it in the grid flow.
-    # New Slot: x=680, y=500 (Below Language), w=320, h=100
-    
+    # 8. CLOCK / DATE (Bottom Right)
     now = datetime.datetime.now()
     time_str = now.strftime("%H:%M")
     date_str = now.strftime("%d %b %Y")
@@ -321,10 +408,8 @@ def create_svg(data):
     '''
 
     # --- NEW SECTION: STATS & STREAK (Bottom) ---
-    # Mimicking the reference image style
-    # y=620, w=1000, h=200
     
-    # Left Box: GitHub Stats
+    # Left Box: GitHub Stats (REAL DATA NOW)
     svg += f'''
     <g transform="translate(0, 620)">
         <rect width="490" height="200" class="card" rx="24"/>
@@ -337,7 +422,7 @@ def create_svg(data):
             
             <!-- Item 2 -->
             <text x="0" y="30" class="label">Total Commits ({current_year}):</text>
-            <text x="200" y="30" class="text" font-weight="bold">{stats['commits_year']}</text>
+            <text x="200" y="30" class="text" font-weight="bold">{stats['total_commits']}</text>
             
             <!-- Item 3 -->
             <text x="0" y="60" class="label">Total PRs:</text>
@@ -357,7 +442,7 @@ def create_svg(data):
     </g>
     '''
     
-    # Right Box: Streak Stats
+    # Right Box: Streak Stats (REAL DATA NOW)
     svg += f'''
     <g transform="translate(510, 620)">
         <rect width="490" height="200" class="card" rx="24"/>
@@ -365,7 +450,7 @@ def create_svg(data):
         <!-- 3 Columns -->
         <!-- Col 1: Total Contribs -->
         <g transform="translate(80, 80)">
-            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">{stats['commits_year'] + 150}</text>
+            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">{stats['total_contributions']}</text>
             <text x="0" y="30" text-anchor="middle" class="label">Total</text>
             <text x="0" y="45" text-anchor="middle" class="label">Contributions</text>
         </g>
@@ -378,7 +463,7 @@ def create_svg(data):
             <circle r="50" fill="none" stroke="{THEME['border']}" stroke-width="4"/>
             <circle r="50" fill="none" stroke="{THEME['text_main']}" stroke-width="4" stroke-dasharray="314" stroke-dashoffset="100" transform="rotate(-90)"/>
             <text x="0" y="-10" text-anchor="middle" font-size="16">🔥</text>
-            <text x="0" y="20" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">5</text>
+            <text x="0" y="20" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">{stats['current_streak']}</text>
             <text x="0" y="70" text-anchor="middle" class="label">Current Streak</text>
         </g>
         
@@ -387,7 +472,7 @@ def create_svg(data):
         
         <!-- Col 3: Longest Streak -->
         <g transform="translate(410, 80)">
-            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">14</text>
+            <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="{THEME['text_main']}">{stats['longest_streak']}</text>
             <text x="0" y="30" text-anchor="middle" class="label">Longest</text>
             <text x="0" y="45" text-anchor="middle" class="label">Streak</text>
         </g>
