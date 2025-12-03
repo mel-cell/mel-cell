@@ -2,7 +2,7 @@
 
 <div align="center">
   <!-- START_GRID -->
-  <img src="assets/grid.svg" alt="Profile Grid" width="800" />
+  <img src="assets/grid.svg" alt="Profile Grid" width="900" />
   <!-- END_GRID -->
 </div>
 
