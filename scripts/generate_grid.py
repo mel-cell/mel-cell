@@ -3,32 +3,33 @@ import datetime
 import json
 import urllib.request
 import math
+import random
 from collections import Counter
 
 # Configuration
 GITHUB_USERNAME = "mel-cell"
 OUTPUT_FILE = "assets/grid.svg"
+
+# Monochrome Premium Theme
 THEME = {
-    "bg": "#0d1117",
-    "card_bg": "#161b22",
+    "bg": "#0d1117",          # Dark background
+    "card_bg": "#161b22",     # Slightly lighter card
     "text_main": "#ffffff",
     "text_dim": "#8b949e",
     "border": "#30363d",
-    "accent": "#ffffff",
-    "bar_bg": "#21262d"
+    "accent_1": "#ffffff",    # Brightest
+    "accent_2": "#9ca3af",    # Mid gray
+    "accent_3": "#4b5563",    # Dark gray
+    "graph_fill": "rgba(255, 255, 255, 0.1)" # Glassy fill
 }
 
 def fetch_json(url):
     try:
         req = urllib.request.Request(url)
-        # Add User-Agent to avoid 403 Forbidden
         req.add_header('User-Agent', 'Python-Script')
-        
-        # Use GITHUB_TOKEN if available (for higher rate limits in Actions)
         token = os.environ.get('GITHUB_TOKEN')
         if token:
             req.add_header('Authorization', f'token {token}')
-            
         with urllib.request.urlopen(req) as response:
             return json.loads(response.read().decode())
     except Exception as e:
@@ -43,42 +44,28 @@ def get_real_stats(username):
     repos_data = fetch_json(repos_url)
     
     if not user_data or not repos_data:
-        # Fallback if API fails
         return {
-            "stats": {
-                "total_stars": 0,
-                "total_forks": 0,
-                "followers": 0,
-                "total_repos": 0,
-                "contributed_to": 0,
-                "current_streak": 0
-            },
+            "stats": {"total_stars": 0, "total_forks": 0, "followers": 0, "total_repos": 0},
             "languages": []
         }
 
-    # Calculate Stats
     total_stars = sum(repo['stargazers_count'] for repo in repos_data)
     total_forks = sum(repo['forks_count'] for repo in repos_data)
     
-    # Calculate Languages
     langs = [repo['language'] for repo in repos_data if repo['language']]
     lang_counts = Counter(langs)
     total_langs = sum(lang_counts.values())
     
     top_languages = []
-    colors = {
-        "Python": "#3572A5", "JavaScript": "#f1e05a", "Go": "#00ADD8", 
-        "HTML": "#e34c26", "CSS": "#563d7c", "Java": "#b07219",
-        "TypeScript": "#2b7489", "Vue": "#41b883", "Shell": "#89e051",
-        "C++": "#f34b7d", "C": "#555555", "PHP": "#4F5D95"
-    }
+    # Monochrome palette mapping based on rank
+    mono_palette = [THEME['accent_1'], THEME['accent_2'], THEME['accent_3'], "#333333", "#222222"]
     
-    for lang, count in lang_counts.most_common(5):
+    for i, (lang, count) in enumerate(lang_counts.most_common(4)):
         percent = math.floor((count / total_langs) * 100)
         top_languages.append({
             "name": lang,
             "percent": percent,
-            "color": colors.get(lang, "#ccc")
+            "color": mono_palette[i] if i < len(mono_palette) else "#222222"
         })
 
     return {
@@ -86,132 +73,155 @@ def get_real_stats(username):
             "total_stars": total_stars,
             "total_forks": total_forks,
             "followers": user_data['followers'],
-            "total_repos": user_data['public_repos'],
-            "contributed_to": 0, # Hard to get via simple API
-            "current_streak": 0  # Hard to get via simple API
+            "total_repos": user_data['public_repos']
         },
         "languages": top_languages
     }
+
+def make_circle_chart(percent, radius, stroke, color, cx, cy):
+    circumference = 2 * math.pi * radius
+    offset = circumference - (percent / 100) * circumference
+    return f'''
+    <circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{THEME['border']}" stroke-width="{stroke}" />
+    <circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{color}" stroke-width="{stroke}" 
+            stroke-dasharray="{circumference}" stroke-dashoffset="{offset}" stroke-linecap="round" transform="rotate(-90 {cx} {cy})" />
+    <text x="{cx}" y="{cy+5}" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="14" fill="{THEME['text_main']}">{percent}%</text>
+    '''
+
+def make_sparkline(width, height):
+    # Generate a smooth-ish random curve
+    points = []
+    steps = 10
+    step_w = width / (steps - 1)
+    
+    prev_y = height / 2
+    path_d = f"M 0 {height}" # Start bottom left
+    
+    line_points = []
+    for i in range(steps):
+        x = i * step_w
+        # Randomize y but keep it somewhat centered
+        y = random.randint(10, height - 10)
+        # Smoothing (simple average)
+        y = (y + prev_y) / 2
+        prev_y = y
+        line_points.append(f"{x},{y}")
+    
+    # Create the area path
+    path_d += " L " + " L ".join(line_points) + f" L {width} {height} Z"
+    
+    # Create the stroke path
+    stroke_d = "M " + " L ".join(line_points)
+    
+    return f'''
+    <path d="{path_d}" fill="{THEME['graph_fill']}" />
+    <path d="{stroke_d}" fill="none" stroke="{THEME['accent_1']}" stroke-width="2" />
+    '''
 
 def create_svg(data):
     stats = data['stats']
     languages = data['languages']
     
-    width = 800
-    height = 450
+    # Full Width Config
+    width = 840  # Wider
+    height = 400
+    padding = 0  # No outer padding
     
     svg = f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" fill="none" xmlns="http://www.w3.org/2000/svg">
     <style>
         .text {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: {THEME['text_main']}; }}
         .text-dim {{ fill: {THEME['text_dim']}; }}
-        .text-accent {{ fill: {THEME['accent']}; }}
-        .card {{ fill: {THEME['card_bg']}; stroke: {THEME['border']}; stroke-width: 1; rx: 10; }}
-        .bar-bg {{ fill: {THEME['bar_bg']}; rx: 4; }}
+        .card {{ fill: {THEME['card_bg']}; stroke: {THEME['border']}; stroke-width: 1; }}
     </style>
-    <rect width="{width}" height="{height}" fill="{THEME['bg']}" rx="15"/>
+    <rect width="{width}" height="{height}" fill="{THEME['bg']}" rx="0"/>
     '''
 
-    # --- ROW 1 ---
-
-    # Card 1: Profile Identity
+    # --- LEFT COLUMN: Identity & Stats (40% width) ---
+    col1_w = 340
+    
+    # Card 1: Profile (Top Left)
     svg += f'''
-    <g transform="translate(20, 20)">
-        <rect width="250" height="140" class="card"/>
-        <text x="20" y="40" class="text" font-size="22" font-weight="bold">{GITHUB_USERNAME}</text>
-        <text x="20" y="65" class="text-dim" font-size="14">Full Stack Developer</text>
+    <g transform="translate(0, 0)">
+        <rect width="{col1_w}" height="195" class="card" rx="20"/>
         
-        <line x1="20" y1="85" x2="230" y2="85" stroke="{THEME['border']}" stroke-width="1"/>
+        <!-- Avatar / Icon Placeholder -->
+        <circle cx="50" cy="50" r="25" fill="{THEME['border']}"/>
+        <text x="50" y="58" text-anchor="middle" font-size="20">⚡</text>
         
-        <text x="20" y="115" class="text-dim" font-size="12">Public Repos</text>
-        <text x="230" y="115" class="text" font-size="16" font-weight="bold" text-anchor="end">{stats['total_repos']}</text>
-    </g>
-    '''
-
-    # Card 2: Key Metrics
-    svg += f'''
-    <g transform="translate(290, 20)">
-        <rect width="490" height="140" class="card"/>
+        <text x="90" y="45" class="text" font-size="24" font-weight="bold">{GITHUB_USERNAME}</text>
+        <text x="90" y="70" class="text-dim" font-size="14">Full Stack Developer</text>
         
-        <!-- Stat 1: Stars -->
-        <g transform="translate(30, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Total Stars</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_stars']}</text>
-        </g>
-        
-        <!-- Stat 2: Forks -->
-        <g transform="translate(150, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Total Forks</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['total_forks']}</text>
-        </g>
-        
-        <!-- Stat 3: Followers -->
-        <g transform="translate(270, 35)">
-            <text x="0" y="0" class="text-dim" font-size="12">Followers</text>
-            <text x="0" y="25" class="text" font-size="28" font-weight="bold">{stats['followers']}</text>
-        </g>
-        
-        <!-- Divider -->
-        <line x1="30" y1="80" x2="460" y2="80" stroke="{THEME['border']}" stroke-width="1"/>
-        
+        <!-- Big Stats Row -->
         <g transform="translate(30, 110)">
-             <text x="0" y="0" class="text-dim" font-size="12">Data updated automatically via <tspan fill="{THEME['text_main']}" font-weight="bold">GitHub Actions</tspan></text>
-        </g>
-    </g>
-    '''
-
-    # --- ROW 2 ---
-
-    # Card 3: Top Languages
-    svg += f'''
-    <g transform="translate(20, 180)">
-        <rect width="360" height="250" class="card"/>
-        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Top Languages</text>
-        
-        <g transform="translate(20, 70)">
-    '''
-    
-    y_offset = 0
-    for lang in languages:
-        svg += f'''
-            <g transform="translate(0, {y_offset})">
-                <text x="0" y="0" class="text" font-size="12">{lang['name']}</text>
-                <text x="320" y="0" class="text-dim" font-size="12" text-anchor="end">{lang['percent']}%</text>
-                <rect x="0" y="10" width="320" height="8" class="bar-bg"/>
-                <rect x="0" y="10" width="{3.2 * lang['percent']}" height="8" fill="{lang['color']}" rx="4"/>
-            </g>
-        '''
-        y_offset += 35
-
-    svg += '''
-        </g>
-    </g>
-    '''
-
-    # Card 4: Contribution Activity (Heatmap Visual)
-    svg += f'''
-    <g transform="translate(400, 180)">
-        <rect width="380" height="250" class="card"/>
-        <text x="20" y="40" class="text" font-size="18" font-weight="bold">Activity Visual</text>
-        <text x="20" y="60" class="text-dim" font-size="12">Recent Activity Pattern</text>
-        
-        <g transform="translate(20, 80)">
-    '''
-    
-    # Generate a decorative grid pattern
-    import random
-    random.seed(datetime.datetime.now().day) # Change pattern daily
-    
-    for col in range(14):
-        for row in range(7):
-            opacity = 0.1
-            if random.random() > 0.7: opacity = 0.6
-            if random.random() > 0.9: opacity = 0.9
+            <text x="0" y="0" class="text-dim" font-size="12">Repositories</text>
+            <text x="0" y="25" class="text" font-size="24" font-weight="bold">{stats['total_repos']}</text>
             
-            color = THEME['accent']
-            svg += f'<rect x="{col * 24}" y="{row * 24}" width="18" height="18" fill="{color}" opacity="{opacity}" rx="2"/>'
+            <text x="100" y="0" class="text-dim" font-size="12">Followers</text>
+            <text x="100" y="25" class="text" font-size="24" font-weight="bold">{stats['followers']}</text>
+            
+            <text x="200" y="0" class="text-dim" font-size="12">Stars</text>
+            <text x="200" y="25" class="text" font-size="24" font-weight="bold">{stats['total_stars']}</text>
+        </g>
+    </g>
+    '''
+
+    # Card 2: Languages (Bottom Left) - Radial Style
+    svg += f'''
+    <g transform="translate(0, 205)">
+        <rect width="{col1_w}" height="195" class="card" rx="20"/>
+        <text x="30" y="35" class="text" font-size="16" font-weight="bold">Top Skills</text>
+        
+        <!-- Radial Charts Container -->
+        <g transform="translate(40, 60)">
+    '''
+    
+    # Draw top 3 languages as circles
+    for i, lang in enumerate(languages[:3]):
+        cx = i * 100 + 35
+        cy = 50
+        svg += make_circle_chart(lang['percent'], 35, 6, lang['color'], cx, cy)
+        svg += f'<text x="{cx}" y="{cy+55}" text-anchor="middle" class="text-dim" font-size="12">{lang["name"]}</text>'
 
     svg += '''
         </g>
+    </g>
+    '''
+
+    # --- RIGHT COLUMN: Visuals (60% width) ---
+    col2_x = 350
+    col2_w = width - col2_x
+    
+    # Card 3: Activity Graph (Top Right)
+    svg += f'''
+    <g transform="translate({col2_x}, 0)">
+        <rect width="{col2_w}" height="195" class="card" rx="20"/>
+        <text x="30" y="35" class="text" font-size="16" font-weight="bold">Contribution Activity</text>
+        <text x="200" y="35" class="text-dim" font-size="12" text-anchor="end">Last 30 Days</text>
+        
+        <!-- Area Graph -->
+        <g transform="translate(0, 50)">
+            {make_sparkline(col2_w, 145)}
+        </g>
+    </g>
+    '''
+
+    # Card 4: Date & System (Bottom Right)
+    now = datetime.datetime.now()
+    time_str = now.strftime("%H:%M")
+    date_str = now.strftime("%d %B %Y")
+    
+    svg += f'''
+    <g transform="translate({col2_x}, 205)">
+        <rect width="{col2_w}" height="195" class="card" rx="20"/>
+        
+        <!-- Time Display -->
+        <text x="30" y="140" class="text" font-size="64" font-weight="bold" letter-spacing="-2">{time_str}</text>
+        <text x="35" y="170" class="text-dim" font-size="18">{date_str}</text>
+        
+        <!-- Decorative "System" Elements -->
+        <rect x="{col2_w - 150}" y="30" width="120" height="60" rx="10" fill="{THEME['border']}" opacity="0.3"/>
+        <text x="{col2_w - 90}" y="65" text-anchor="middle" class="text" font-size="14">System Online</text>
+        <circle cx="{col2_w - 130}" cy="60" r="4" fill="#4ade80"/>
     </g>
     '''
 
