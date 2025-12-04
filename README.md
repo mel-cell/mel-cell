@@ -1,7 +1,7 @@
 # Hi there, I'm mel-cell 👋
 
 <div align="center">
-  <img src="https://components-github.vercel.app/api?username=your-username" alt="Bento Grid" width="900" />
+  <img src="https://components-github.vercel.app/api?username=mel-cell" alt="Bento Grid" width="900" />
 </div>
 
 <div align="center">
