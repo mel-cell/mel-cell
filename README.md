@@ -1,9 +1,7 @@
 # Hi there, I'm mel-cell 👋
 
 <div align="center">
-  <!-- START_GRID -->
-  <img src="assets/grid.svg" alt="Profile Grid" width="900" />
-  <!-- END_GRID -->
+  <img src="https://components-github.vercel.app/api?username=your-username" alt="Bento Grid" width="900" />
 </div>
 
 <div align="center">
