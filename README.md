@@ -4,7 +4,6 @@
 ---
 
 <div align="center">
-  <h3>My Stats & Languages</h3>
   <table align="center">
     <tr>
       <td align="center" width="50%">
