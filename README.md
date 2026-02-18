@@ -1,7 +1,8 @@
-# Hi there, I'm mel-cell 👋
-
+# Hi there, I'm mel-cell .ᐟ
 
 ---
+
+<p align="center"> 𓇼 ⋆.˚ 𓆉 𓆝 𓆡⋆.˚ 𓆝 𓇼 𓆟 𓆞 ·｡ 𓆝 𓆟 𓇼</p>
 
 <div align="center">
   <table align="center">
@@ -21,7 +22,7 @@
     <strong>Web Developer | DevOps | Mobile Developer</strong>
   </p>
   <p>
-    <em>Building innovative solutions and thriving in dynamic environments.</em>
+    <em>Dihina tak tumbang. Dipuji makasih bang.</em>
   </p>
 </div>
 
